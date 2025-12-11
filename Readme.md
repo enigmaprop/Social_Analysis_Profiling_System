@@ -55,21 +55,91 @@ pipelines and models are accessable to use via a Command Line Interface
     }
 </style>
 
-## Tech stack
 
-1. #### <b style="font-size: medium">Neo4j</b> as a graph database that supports performing domain knowledge
+---
 
-2. #### <b style="font-size: medium"> Python</b> and it's data science / analysis tools <b>(Numpy, Matplotlib, Pandas, seaborn)</b>
+## 3. System Flow
 
-3. #### <b style="font-size: medium">Networkx</b> library to work with node edges files
+1. **Data Ingestion**
+   - Collect raw datasets from **Facebook**, **Last.fm**, and other social networks.
+   - Store them in `data/storage/raw`.
 
-4. #### <b style="font-size: medium">Scikit learn</b> and tensorflow
+2. **Data Preprocessing**
+   - Clean and normalize user IDs, event IDs, and relationships.
+   - Prepare datasets for graph ingestion in `src/preprocessing`.
 
-<br>
+3. **Graph Construction**
+   - Load nodes and relationships into **Neo4j**:
+     - `(User)-[:ATTENDED]->(Event)`
+     - `(User)-[:FRIENDS_WITH]->(User)` (optional)
+   - Additional metadata from `infoExtra` can enrich the graph.
 
-## Architecture
+4. **Feature Computation**
+   - Node-level metrics: degree, centrality.
+   - Edge-level metrics: similarity, co-attendance.
+   - Tools: **NetworkX**, **GDS**.
 
-<img src='Conceptual_Diagram.png'> <b style="font-weight: bold; font-size: medium">The Conceptual Diagram</b> </img>
+5. **Graph Analytics & Profiling**
+   - Community detection: `gds.louvain`
+   - Node similarity: `gds.nodeSimilarity`
+   - Embeddings: `gds.fastRP`
+   - Predictive profiling: scikit-learn / TensorFlow models.
+
+6. **Evaluation & Monitoring**
+   - Validate profiling accuracy.
+   - Log pipeline and model performance in `logs/logs_records`.
+   - Monitor pipelines and analytics via `monitoring`.
+
+7. **Interface**
+   - CLI (`main.py`) or API (`api`) for:
+     - Querying profiles
+     - Running analyses
+     - Generating reports
+
+---
+
+## 4. Tech Stack
+
+| Component | Purpose |
+|-----------|---------|
+| **Neo4j** | Graph database for nodes, edges, and graph algorithms |
+| **Python** (NumPy, Pandas, Matplotlib, seaborn) | Data preprocessing, analysis, visualization |
+| **NetworkX** | Offline graph computations |
+| **Scikit-learn & TensorFlow** | ML models for user profiling and embeddings |
+| **CLI / API** | User interface for running commands and fetching results |
+
+---
+
+## 5. Conceptual Diagram
+
+Raw Social Data (Facebook / Last.fm)<br>
+│<br>
+▼<br>
+Preprocessing (src/preprocessing)<br>
+│<br>
+▼<br>
+Graph Construction (Neo4j)<br>
+│<br>
+▼<br>
+Feature Computation & Analytics (GDS / NetworkX)<br>
+│<br>
+▼<br>
+Profiling & ML Models (src/models)<br>
+│<br>
+▼<br>
+Evaluation & Monitoring (logs / monitoring)<br>
+│<br>
+▼<br>
+CLI / API / Reports (notebooks / api)
+
+
+## 6. Key Architectural Principles
+
+- **Separation of Concerns** — independent modules for ingestion, preprocessing, modeling, and monitoring.
+- **Graph-centric design** — optimized for social network analytics using Neo4j and GDS.
+- **Data-driven profiling** — user labels and insights derived from activity and relationships.
+- **Extensible & modular** — easy to add datasets, models, or analytics pipelines.
+- **Notebook-friendly** — supports exploratory analysis and reporting in Jupyter.
 
 
 <br>
