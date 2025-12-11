@@ -22,8 +22,14 @@ NODE_MAP = {
 
 def import_lastfm_like_file(repo: Neo4jRepo, input_file: str):
     try:
-        with open(input_file, "r", encoding="utf-8") as f:
-            reader = csv.reader(f, delimiter="|")
+        # if not repo.verify_connection():
+        #     logger.error("Cannot connect to Neo4j database.")
+        #     return
+        
+        with open(input_file, "r", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter="|")
+            count = 0
+            # Make a query to input all nodes and relationships one time
             for row in reader:
                 if len(row) != 3:
                     continue
@@ -48,6 +54,9 @@ def import_lastfm_like_file(repo: Neo4jRepo, input_file: str):
                     to_key={"id": target_id},
                     rel_type=rel_type
                 )
+                count += 1
+                if count % 1000 == 0:
+                    print(f"Processed {count} lines.")
 
     except Exception as e:
         logger.error(f"Failed to import data from '{input_file}': {e}")

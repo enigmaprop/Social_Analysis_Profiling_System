@@ -16,17 +16,17 @@ class Cli:
 
     @staticmethod
     def import_to_mongo(uri: str, port: str, db: str, input_file: str, collection_name: str = "users"):
-            repo = MongoDBRepo(uri, port, db)
-            logger.info(f"Importing '{input_file}' into MongoDB collection '{collection_name}'...")
-            import_lastfm_file(repo, input_file, collection_name)
-            repo.close()
+        repo = MongoDBRepo(uri, port, db)
+        logger.info(f"Importing '{input_file}' into MongoDB collection '{collection_name}'...")
+        import_lastfm_file(repo, input_file, collection_name)
+        repo.close()
 
     @staticmethod
-    def import_to_neo4j(uri: str, user: str, password: str, input_file: str):
-            repo = Neo4jRepo(uri, user, password)
-            logger.info(f"Importing '{input_file}' into Neo4j...")
-            import_lastfm_like_file(repo, input_file)
-            repo.close()
+    def import_to_neo4j(uri: str, user: str, db: str, password: str, input_file: str):
+        repo = Neo4jRepo(db, uri, user, password)
+        logger.info(f"Importing '{input_file}' into Neo4j...")
+        import_lastfm_like_file(repo, input_file)
+        repo.close()
     
     @staticmethod
     def start():
@@ -55,20 +55,20 @@ class Cli:
                     cmd = parts[0]
                     args = parts[1:]
 
-                    if cmd == "import_mongo":
-                        if len(args) < 4:
+                    if cmd == "import_mongo": #MongoDB csv import
+                        if len(args) < 5:
                             print("Usage: import_mongo <uri> <port> <db> <input_file> [collection_name]")
                         else:
-                            uri, port, db, input_file = args[:4]
+                            uri, port, db, input_file = args[:5]
                             collection = args[4] if len(args) > 4 else "users"
                             Cli.import_to_mongo(uri, int(port), db, input_file, collection)
 
-                    elif cmd == "import_neo4j":
-                        if len(args) < 4:
-                            print("Usage: import_neo4j <uri> <user> <password> <input_file>")
+                    elif cmd == "import_neo4j": # Neo4j csv import
+                        if len(args) < 5:
+                            print("Usage: import_neo4j <uri> <user> <password> <db> <input_file>")
                         else:
-                            uri, user, password, input_file = args[:4]
-                            Cli.import_to_neo4j(uri, user, password, input_file)
+                            uri, user, password, db, input_file = args[:5]
+                            Cli.import_to_neo4j(uri, user, db, password, input_file)
 
                     else:
                         print(f"Unknown command: {cmd}. Type 'help' for help.")

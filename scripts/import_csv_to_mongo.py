@@ -37,7 +37,7 @@ def import_lastfm_file(repo: MongoDBRepo, input_file: str, collection_name: str 
 
                 count += 1
                 if count % 1000 == 0:
-                    logger.info(f"Processed {count} lines.")
+                    print(f"Processed {count} lines.")
 
         logger.info(f"Completed import. Total relationships processed: {count}")
     except Exception as e:
