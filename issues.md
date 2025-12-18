@@ -1,1 +1,10 @@
-1. It enters duplicated entities
+- Make the eda for the activities data --------> Done
+- Make the encoding functions ---------> Done
+- Make the Scaling function --------> Done
+- Detect the models want to train ---------> Done
+- Make the training eval functions ---------> Done
+- Start the training ---------> Done
+- Make the Log transform function ---------> Done
+- Train the Model ----------> Done
+- Evaluate the model ----------> Done
+- make the API

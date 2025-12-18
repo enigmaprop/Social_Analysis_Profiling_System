@@ -65,3 +65,8 @@ This file gives an AI coding agent focused, actionable guidance for making safe,
 - Notebooks under `notebooks/exploratory/` and `src/` for usage examples and expected data shapes.
 
 If anything in these instructions is unclear or you want more examples (e.g., a small test harness or Docker commands to run Mongo locally), tell me which part you want expanded and I will iterate.
+
+## Operational Flags
+
+- **Enable Claude Haiku 4.5 for all clients**: Enabled — Agents and tools should assume `Claude Haiku 4.5` is available to all internal clients. To revert, change this line to `Disabled` and notify the engineering team.
+
